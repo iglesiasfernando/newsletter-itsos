@@ -1,0 +1,93 @@
+<div style="height:1000px;">
+
+  <mat-grid-list cols="8" rowHeight="800px">
+    <mat-grid-tile [colspan]="4">
+      <form class="tileContent" [formGroup]="formulario" >
+        <mat-form-field  class="width50" appearance="fill">
+          <mat-label>Asunto</mat-label>
+          <input matInput placeholder="Asunto" name="asunto" id="asunto" formControlName="asunto">
+          <mat-error *ngIf="formulario.get('asunto')?.hasError('required') && formulario.get('asunto')?.touched">El asunto es obligatorio</mat-error>
+        </mat-form-field>
+      
+        <mat-form-field  class="width50" appearance="fill">
+          <mat-label>Destinatario</mat-label>
+          <input matInput placeholder="Destinatario"  name="destinatario" id="destinatario" formControlName="destinatario">
+          <mat-error *ngIf="formulario.get('destinatario')?.hasError('required') && formulario.get('destinatario')?.touched">El destinatario es obligatorio</mat-error>
+          <mat-error *ngIf="formulario.get('destinatario')?.hasError('email') && formulario.get('destinatario')?.touched">El mail debe ser válido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field  class="width50" appearance="fill">
+          <mat-label>Cuit cliente</mat-label>
+          <input matInput placeholder="Cuit cliente"  name="cuitCliente" id="cuitCliente" formControlName="cuitCliente">
+          <mat-error *ngIf="formulario.get('cuitCliente')?.hasError('required') && formulario.get('cuitCliente')?.touched">El cuit del cliente es obligatorio</mat-error>
+        </mat-form-field>
+       <ejs-richtexteditor placeholder="Ingrese el titulo del mail..." id='tituloEditor' name='tituloEditor' #tituloEditor [toolbarSettings]='tools' class="editor" >
+        </ejs-richtexteditor> 
+  
+        <ejs-richtexteditor placeholder="Ingrese el subtitulo del item..." id='selectedSubtituloEditor' name='selectedSubtituloEditor' #selectedSubtituloEditor [toolbarSettings]='tools' class="editor" >
+        </ejs-richtexteditor>
+        <ejs-richtexteditor placeholder="Ingrese el texto del item..." id='selectedTextoEditor' name='selectedTextoEditor' #selectedTextoEditor [toolbarSettings]='tools' class="editor" >
+        </ejs-richtexteditor>
+        <mat-form-field  class="width50" appearance="fill">
+          <mat-label>Texto del botón</mat-label>
+          <input matInput placeholder="Texto del botón" name="textoBoton" id="textoBoton" formControlName="textoBoton">
+        </mat-form-field>
+        <mat-form-field  class="width50" appearance="fill">
+          <mat-label>Url del botón</mat-label>
+          <input matInput placeholder="Url del botón" name="urlBoton" id="urlBoton" formControlName="urlBoton">
+        </mat-form-field>
+        <div class="">
+          <mat-form-field class="width50" appearance="fill">
+            <mat-label>Imagen del item</mat-label>
+            <input matInput #imagenItem placeholder="www.imagen.com" id='selectedImagen' name='selectedImagen'  formControlName="selectedImagen">
+            <mat-hint ><strong>Ingrese la URL pública de la imágen</strong> </mat-hint>
+            
+          </mat-form-field>
+          <img *ngIf="formulario.get('selectedImagen')?.value" [src]="formulario.get('selectedImagen')?.value" style="width: 60px;height: 60px;">
+
+            <button class="floatR" color="primary" mat-mini-fab aria-label="plus icon button"  (click) = "addItem()">
+              <mat-icon>add</mat-icon>
+            </button>
+          
+        </div>
+       
+      </form>
+        
+
+
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="4">
+      <div>
+        <img src="assets/tutorial.png" style="height:389px;width: 572px;" class="floatTop" >
+      </div>
+      
+      <mat-accordion class=" width100 marginTop12">
+        
+        <ng-container *ngFor="let item of items ; let itemIndex = index ">
+          <mat-expansion-panel hideToggle >
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Item n° {{itemIndex +1 }}
+              </mat-panel-title>
+              
+            </mat-expansion-panel-header>
+            <p>{{item.contenido.texto}}</p>
+            <p>{{item.contenido.subtitulo}}</p>
+            <img *ngIf="item.imagen" [src]="item.imagen" style="width: 60px;height: 60px;">
+              
+          </mat-expansion-panel>
+        </ng-container>
+        
+      </mat-accordion>
+
+    </mat-grid-tile>
+    
+  </mat-grid-list>
+  
+      <div class="width100">
+        <button *ngIf="!cargando"  [disabled]="formulario.invalid"  mat-button color="primary" (click)="sendMail()" class="marginLeft40">Enviar mail</button>
+        <mat-spinner *ngIf="cargando" [diameter]="30" class="marginLeft43"></mat-spinner>
+      </div>
+      
+
+</div>
